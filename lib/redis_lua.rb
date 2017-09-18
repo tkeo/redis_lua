@@ -1,5 +1,7 @@
 require "redis_lua/version"
+require "digest"
 require "redis"
+require "yaml"
 
 module RedisLua
   class << self
