@@ -5,10 +5,10 @@ require "yaml"
 
 module RedisLua
   class << self
-    attr_accessor :config_path, :lua_script_path
+    attr_accessor :config_file_path, :lua_script_path
 
     def config
-      @config ||= load_config(config_path)
+      @config ||= load_config(config_file_path)
     end
 
     def load_config(file_path)
