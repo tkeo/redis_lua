@@ -2,9 +2,15 @@ require "test/unit"
 require "redis_lua"
 
 class RedisLuaTest < Test::Unit::TestCase
-  setup do
-    RedisLua.lua_script_path = "test/lua_scripts"
-    RedisLua.config_file_path = "test/config/redis_lua.yml"
+  class << self
+    def startup
+      RedisLua.lua_script_path = "test/lua_scripts"
+      RedisLua.config_file_path = "test/config/redis_lua.yml"
+    end
+  end
+
+  cleanup do
+    Redis.current.script(:flush)
   end
 
   def test_config
@@ -25,7 +31,15 @@ class RedisLuaTest < Test::Unit::TestCase
     end
   end
 
+  def test_load_script
+    RedisLua.load_script("add1")
+    assert do
+      RedisLua.loaded_script?("add1") == true
+    end
+  end
+
   def test_call_script
+    RedisLua.load_scripts
     assert do
       RedisLua.call_script("add1", argv: [1]) == 2
     end

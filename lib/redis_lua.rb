@@ -21,15 +21,23 @@ module RedisLua
     end
 
     def load_scripts
-      config.each do |key, value|
-        script = read_script(key)
-        sha1 = Digest::SHA1.hexdigest(script)
-        if sha1 == value
-          Redis.current.script(:load, script)
-        else
-          raise "sha1 digest mismatch: #{key} #{sha1}"
-        end
+      config.each do |key, _|
+        load_script(key)
       end
+    end
+
+    def load_script(name)
+      script = read_script(name)
+      sha1 = Digest::SHA1.hexdigest(script)
+      if sha1 == config[name]
+        Redis.current.script(:load, script)
+      else
+        raise "sha1 digest mismatch: #{key} #{sha1}"
+      end
+    end
+
+    def loaded_script?(name)
+      Redis.current.script(:exists, config[name])
     end
 
     def call_script(name, *args)
