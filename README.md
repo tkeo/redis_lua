@@ -1,5 +1,7 @@
 # RedisLua
 
+[![Build Status](https://travis-ci.org/tkeo/redis_lua.svg?branch=master)](https://travis-ci.org/tkeo/redis_lua)
+
 Redis Lua scripting wrapper for ruby
 
 ## Installation
